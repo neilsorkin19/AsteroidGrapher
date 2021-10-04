@@ -1,5 +1,5 @@
 # AsteroidGrapher
-Using binary radio telescope data, I plotted one angle of [Asteroid 2016 AJ193](https://www.jpl.nasa.gov/images/radar-reveals-the-surface-of-asteroid-2016-aj193).
+Using binary file radar data, I plotted one angle of [Asteroid 2016 AJ193](https://www.jpl.nasa.gov/images/radar-reveals-the-surface-of-asteroid-2016-aj193).
 
 Below are the plots that I made:
 
