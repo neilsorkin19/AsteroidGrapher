@@ -2,13 +2,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
+
+def filter_function(input_array):
+    return input_array * 0.3
+
+
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     rows = 511
     columns = 512
     # used for removing noise
     filter_quantile = 0.90
-    filtered_multiplier = 0.01
 
     directory = 'data_maps\\'
     # used to add images and remove noise
@@ -21,8 +25,11 @@ if __name__ == '__main__':
     for filename, ax in zip(os.listdir(directory), axs.flat):
         # read and convert to big endian
         array = np.fromfile(directory + filename, np.dtype('<i4'), -1, "", 0)
+        # center the asteroid
+        array = np.roll(array, shift=int(rows / 2 * columns / 2), axis=0)
+
         # filter noise / background
-        filtered_array = np.where(array < np.quantile(array, filter_quantile), array * filtered_multiplier, array)
+        filtered_array = np.where(array < np.quantile(array, filter_quantile), filter_function(array), array)
         # shape into 2d array
         mapped = np.reshape(filtered_array, (rows, columns))
         # add it to the combined image
@@ -36,7 +43,9 @@ if __name__ == '__main__':
     plt.show()
 
     # filter the summed image further
-    filtered_summed_arrays = np.where(summed_arrays < np.quantile(summed_arrays, filter_quantile), 0, summed_arrays)
+    filtered_summed_arrays = np.where(
+        summed_arrays < np.quantile(summed_arrays, filter_quantile),
+        0, summed_arrays)
     plt.imshow(filtered_summed_arrays)
     plt.suptitle('Asteroid 2016 AJ193')
     plt.tight_layout()
